@@ -2,4 +2,19 @@
     <string name="app_name">ToDo git</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title">Title</string>
+    <string name="search">Search</string>
+    <string name="sortby">SortBy</string>
+    <string name="sort_by">sort_By</string>
+    <string name="delete_all">Delete All</string>
+    <string name="menu_priority_hight">menu_priority_hight</string>
+    <string name="menu_priority_low">menu_priority_low</string>
+    <string name="menu_priority_high">menu_priority_high</string>
+
+
+    <string-array name="priorities">
+        <item>High priority</item>
+        <item>Medium priority</item>
+        <item>Low priority</item>
+    </string-array>
 </resources>

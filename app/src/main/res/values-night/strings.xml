@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title">Title</string>
+    <string name="search">Search</string>
+    <string name="delete_all">Delete All</string>
+    <string name="menu_priority_hight">menu_priority_hight</string>
+    <string name="menu_priority_low">menu_priority_low</string>
+    <string name="menu_priority_high">menu_priority_high</string>
+</resources>
