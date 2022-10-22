@@ -3,12 +3,13 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'androidx.navigation.safeargs'
+    id 'kotlin-parcelize'
 }
 
 android {
     compileSdk 32
 
-    buildFeatures{
+    buildFeatures {
         viewBinding true
     }
 
@@ -70,6 +71,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
-
+    // Adding Sweet Alert Library
+    implementation 'com.github.f0ris.sweetalert:library:1.6.2'
 
 }

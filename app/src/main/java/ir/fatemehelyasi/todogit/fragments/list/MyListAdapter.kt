@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import ir.fatemehelyasi.todogit.R
 import ir.fatemehelyasi.todogit.data.models.Priority
@@ -23,6 +24,7 @@ class MyListAdapter : RecyclerView.Adapter<MyListAdapter.MyViewHolder>() {
         val Title_Txt = itemView.findViewById<TextView>(R.id.title_txt)!!
         val Description_Txt = itemView.findViewById<TextView>(R.id.description_txt)!!
         val Priority_Indicator = itemView.findViewById<CardView>(R.id.priority_indicator)!!
+        val row_background=itemView.findViewById<ViewGroup>(R.id.row_background)
     }
 
     //------------------------------------------------------------------------------------------------
@@ -65,6 +67,10 @@ class MyListAdapter : RecyclerView.Adapter<MyListAdapter.MyViewHolder>() {
                     )
                 )
             }
+        }
+        holder.row_background.setOnClickListener {
+            val action=ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
+            holder.itemView.findNavController().navigate(action)
         }
     }
 

@@ -1,8 +1,6 @@
 package ir.fatemehelyasi.todogit.fragments.add
 
-import android.icu.text.CaseMap
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -12,13 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import ir.fatemehelyasi.todogit.R
-import ir.fatemehelyasi.todogit.data.models.Priority
 import ir.fatemehelyasi.todogit.data.models.ToDoData
 import ir.fatemehelyasi.todogit.data.viewmodel.ToDoViewModel
 import ir.fatemehelyasi.todogit.databinding.FragmentAddBinding
-import ir.fatemehelyasi.todogit.databinding.FragmentListBinding
 import ir.fatemehelyasi.todogit.fragments.SharedViewModel
-import java.lang.Override as Override1
 
 
 class AddFragment : Fragment() {

@@ -19,11 +19,29 @@ class ToDoViewModel(application: Application) : AndroidViewModel(application) {
 
     val getAllData: LiveData<List<ToDoData>> = repository.getAllData
 
-
     //coroutines
-    fun insertData(toDoData: ToDoData){
-        viewModelScope.launch (  Dispatchers.IO){
-           repository.insertData(toDoData)
+    //because it is a coroutine  have to been in view modelScope
+    fun insertData(toDoData: ToDoData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertData(toDoData)
+        }
+    }
+
+    fun updateData(toDoData: ToDoData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateData(toDoData)
+        }
+    }
+
+    fun deleteData(toDoData: ToDoData) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteData(toDoData)
+        }
+    }
+
+    fun deleteAll() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAll()
         }
     }
 }

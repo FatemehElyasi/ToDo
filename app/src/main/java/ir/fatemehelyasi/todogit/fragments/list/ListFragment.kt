@@ -1,9 +1,8 @@
 package ir.fatemehelyasi.todogit.fragments.list
 
-import android.content.res.Configuration
-import android.graphics.ImageDecoder
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -13,21 +12,18 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import ir.fatemehelyasi.todogit.R
 import ir.fatemehelyasi.todogit.data.viewmodel.ToDoViewModel
 import ir.fatemehelyasi.todogit.databinding.FragmentListBinding
 
 class ListFragment : Fragment() {
 
-    lateinit var binding: FragmentListBinding
+    private lateinit var binding: FragmentListBinding
     private val Adapter: MyListAdapter by lazy { MyListAdapter() }
-    private val mToDoViewModel:ToDoViewModel by viewModels()
+    private val mToDoViewModel: ToDoViewModel by viewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = FragmentListBinding.inflate(layoutInflater)
 
@@ -36,22 +32,20 @@ class ListFragment : Fragment() {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
         }
 
-        binding.listLayout.setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_updateFragment)
-        }
 
         //recycler
-        binding.recyclerview.adapter=Adapter
-       binding.recyclerview.layoutManager=LinearLayoutManager(requireActivity(),RecyclerView.VERTICAL,false)
+        binding.recyclerview.adapter = Adapter
+        binding.recyclerview.layoutManager =
+            LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
 
         //viewModel
-       // return list of data from dataclass database
+        // return list of data from dataclass database
         mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
             //fun recycler
-        Adapter.setData(it)
+            Adapter.setData(it)
         })
 
-            return binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -72,11 +66,34 @@ class ListFragment : Fragment() {
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
+                if(menuItem.itemId==R.id.menu_delete_all){
+                    confirmRemovalToAllData()
+                }
                 return true
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
     }
+    //----------------------------------------------------------------------------//sweet Alert Dialog
+    private fun confirmRemovalToAllData() {
+        val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.ERROR_TYPE)
+
+        dialog.titleText = "Are you sure you want to remove everything?"
+        dialog.confirmText="Delete"
+        dialog.cancelText="Cancel"
+
+        dialog.setCancelClickListener {
+            dialog.dismiss()
+            Toast.makeText(requireContext(), "Canceled to removed everything ", Toast.LENGTH_SHORT).show() }
+
+        dialog.setConfirmClickListener {
+            mToDoViewModel.deleteAll()
+            Toast.makeText(requireContext(), "Removed everything ", Toast.LENGTH_SHORT).show()
+            dialog.dismiss() }
+
+        dialog.show()
+    }
+
     //----------------------------------------------------------------------------
 
 }
