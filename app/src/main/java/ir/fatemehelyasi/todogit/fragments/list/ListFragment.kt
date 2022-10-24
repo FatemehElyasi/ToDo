@@ -10,20 +10,29 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
 import ir.fatemehelyasi.todogit.R
 import ir.fatemehelyasi.todogit.data.viewmodel.ToDoViewModel
 import ir.fatemehelyasi.todogit.databinding.FragmentListBinding
+import ir.fatemehelyasi.todogit.fragments.SharedViewModel
 
 class ListFragment : Fragment() {
 
     private lateinit var binding: FragmentListBinding
-    private val Adapter: MyListAdapter by lazy { MyListAdapter() }
-    private val mToDoViewModel: ToDoViewModel by viewModels()
+    private val adapter: MyListAdapter by lazy { MyListAdapter() }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    private val mToDoViewModel: ToDoViewModel by viewModels()
+    private val mSharedViewModel: SharedViewModel by viewModels()
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentListBinding.inflate(layoutInflater)
 
@@ -34,19 +43,23 @@ class ListFragment : Fragment() {
 
 
         //recycler
-        binding.recyclerview.adapter = Adapter
-        binding.recyclerview.layoutManager =
-            LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
+        setUpRecyclerView()
 
         //viewModel
         // return list of data from dataclass database
         mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
             //fun recycler
-            Adapter.setData(it)
+            mSharedViewModel.checkIfDatabaseEmpty(it)
+            adapter.setData(it)
+        })
+        //empty DB
+        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner, Observer {
+            showEmptyDatabaseViews(it)
         })
 
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -66,7 +79,7 @@ class ListFragment : Fragment() {
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
-                if(menuItem.itemId==R.id.menu_delete_all){
+                if (menuItem.itemId == R.id.menu_delete_all) {
                     confirmRemovalToAllData()
                 }
                 return true
@@ -74,26 +87,59 @@ class ListFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
     }
+
+    //----------------------------------------------------------------------------setUpRecyclerView
+    private fun setUpRecyclerView() {
+        binding.recyclerview.adapter = adapter
+        binding.recyclerview.layoutManager = LinearLayoutManager(requireActivity())
+
+        // swipe To Delete
+        swipeToDelete(binding.recyclerview)
+    }
+    //----------------------------------------------------------------------------swipeToDelete
+    private fun swipeToDelete(recyclerView: RecyclerView){
+        val swipeToDeleteCallback=object :SwipeToDelete(){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val itemToDelete=adapter.dataList[viewHolder.adapterPosition]
+                mToDoViewModel.deleteData(itemToDelete)
+                Toast.makeText(requireContext(),"Successfully Removed:'${itemToDelete.title}'",Toast.LENGTH_SHORT).show()
+            }
+        }
+        val itemTouchHelper=ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
     //----------------------------------------------------------------------------//sweet Alert Dialog
     private fun confirmRemovalToAllData() {
         val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.ERROR_TYPE)
 
         dialog.titleText = "Are you sure you want to remove everything?"
-        dialog.confirmText="Delete"
-        dialog.cancelText="Cancel"
+        dialog.confirmText = "Delete"
+        dialog.cancelText = "Cancel"
 
         dialog.setCancelClickListener {
             dialog.dismiss()
-            Toast.makeText(requireContext(), "Canceled to removed everything ", Toast.LENGTH_SHORT).show() }
+            Toast.makeText(requireContext(), "Canceled to removed everything ", Toast.LENGTH_SHORT)
+                .show()
+        }
 
         dialog.setConfirmClickListener {
             mToDoViewModel.deleteAll()
             Toast.makeText(requireContext(), "Removed everything ", Toast.LENGTH_SHORT).show()
-            dialog.dismiss() }
+            dialog.dismiss()
+        }
 
         dialog.show()
     }
 
     //----------------------------------------------------------------------------
+    fun showEmptyDatabaseViews(emptyDatabase: Boolean) {
+        if (emptyDatabase) {
 
+            binding.noDataImageView.visibility = View.VISIBLE
+            binding.noDataTextView.visibility = View.VISIBLE
+        } else {
+            binding.noDataImageView.visibility = View.INVISIBLE
+            binding.noDataTextView.visibility = View.INVISIBLE
+        }
+    }
 }

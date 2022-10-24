@@ -9,11 +9,20 @@ import android.widget.AdapterView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ir.fatemehelyasi.todogit.R
+import ir.fatemehelyasi.todogit.data.ToDoDatabase
 import ir.fatemehelyasi.todogit.data.models.Priority
+import ir.fatemehelyasi.todogit.data.models.ToDoData
 
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
+
+    val emptyDatabase:MutableLiveData<Boolean> = MutableLiveData(true)
+    fun checkIfDatabaseEmpty(toDoData:List<ToDoData> ){
+        emptyDatabase.value=toDoData.isEmpty()
+    }
+
 
     val listener: AdapterView.OnItemSelectedListener = object :
         AdapterView.OnItemSelectedListener {
