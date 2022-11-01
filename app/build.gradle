@@ -74,4 +74,8 @@ dependencies {
     // Adding Sweet Alert Library
     implementation 'com.github.f0ris.sweetalert:library:1.6.2'
 
+    //anim for recyclerview
+    implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
+
+
 }

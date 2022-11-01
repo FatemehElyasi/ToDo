@@ -14,7 +14,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
+import com.google.android.material.snackbar.Snackbar
 import ir.fatemehelyasi.todogit.R
+import ir.fatemehelyasi.todogit.data.models.ToDoData
 import ir.fatemehelyasi.todogit.data.viewmodel.ToDoViewModel
 import ir.fatemehelyasi.todogit.databinding.FragmentListBinding
 import ir.fatemehelyasi.todogit.fragments.SharedViewModel
@@ -100,13 +102,31 @@ class ListFragment : Fragment() {
     private fun swipeToDelete(recyclerView: RecyclerView){
         val swipeToDeleteCallback=object :SwipeToDelete(){
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val itemToDelete=adapter.dataList[viewHolder.adapterPosition]
-                mToDoViewModel.deleteData(itemToDelete)
-                Toast.makeText(requireContext(),"Successfully Removed:'${itemToDelete.title}'",Toast.LENGTH_SHORT).show()
+                val deletedItem=adapter.dataList[viewHolder.adapterPosition]
+                //Delete Item
+                mToDoViewModel.deleteData(deletedItem)
+                adapter.notifyItemRemoved(viewHolder.adapterPosition )
+                //restore deleted Item
+                restoreDeleteData(viewHolder.itemView,deletedItem,viewHolder.adapterPosition)
+     //           Toast.makeText(requireContext(),"Successfully Removed:'${deletedItem.title}'",Toast.LENGTH_SHORT).show()
             }
         }
         val itemTouchHelper=ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+//    ----------------------------------------------------------------------------Undo
+    private fun restoreDeleteData(view: View, deletedItem: ToDoData, position: Int) {
+        val snackBar = Snackbar.make(
+            view, "Deleted ${deletedItem.title} ", Snackbar.LENGTH_LONG
+        )
+        snackBar.setAction("Undo") {
+            mToDoViewModel.insertData(deletedItem)
+            adapter.notifyItemRemoved(position)
+        }
+        // snackBar background color
+        // snackBar.setBackgroundTint(resources.getColor(com.google.android.material.R.color.design_default_color_on_surface))
+        //  snackBar.setActionTextColor(resources.getColor(R.color.actionTextColor))
+        snackBar.show()
     }
     //----------------------------------------------------------------------------//sweet Alert Dialog
     private fun confirmRemovalToAllData() {
@@ -132,7 +152,7 @@ class ListFragment : Fragment() {
     }
 
     //----------------------------------------------------------------------------
-    fun showEmptyDatabaseViews(emptyDatabase: Boolean) {
+    private fun showEmptyDatabaseViews(emptyDatabase: Boolean) {
         if (emptyDatabase) {
 
             binding.noDataImageView.visibility = View.VISIBLE
