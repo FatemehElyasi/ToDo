@@ -34,6 +34,9 @@
             app:destination="@id/listFragment"
             app:enterAnim="@anim/from_left"
             app:exitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_addFragment_to_listFragment2"
+            app:popUpTo="@id/listFragment" />
     </fragment>
     <fragment
         android:id="@+id/updateFragment"
@@ -44,9 +47,14 @@
             android:id="@+id/action_updateFragment_to_listFragment"
             app:destination="@id/listFragment"
             app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left" />
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <argument
             android:name="currentItem"
             app:argType="ir.fatemehelyasi.todogit.data.models.ToDoData" />
+        <action
+            android:id="@+id/action_updateFragment_to_listFragment2"
+            app:popUpTo="@id/listFragment" />
     </fragment>
 </navigation>

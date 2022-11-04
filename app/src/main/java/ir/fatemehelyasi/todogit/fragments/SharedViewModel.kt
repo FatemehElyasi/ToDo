@@ -65,9 +65,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     //--------------------02
     //checking that are they empty or not
     fun verifyDataFromUser(title: String, description: String): Boolean {
-        return if (TextUtils.isEmpty(title) || TextUtils.isEmpty(description)) {
-            false
-        } else !(title.isEmpty() || description.isEmpty())
+        return !(title.isEmpty() || description.isEmpty())
     }
 
     //--------------------04

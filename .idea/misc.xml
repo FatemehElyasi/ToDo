@@ -8,7 +8,7 @@
         <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/drawable/ic_add.xml" value="0.195" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/drawable/ic_check.xml" value="0.195" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/drawable/ic_launcher_background.xml" value="0.195" />
-        <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/drawable/ic_no_data.xml" value="0.195" />
+        <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/drawable/ic_no_data.xml" value="0.15" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/drawable/ic_search.xml" value="0.195" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/drawable/item_background.xml" value="0.1795" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/layout/activity_main.xml" value="0.19322916666666667" />
@@ -16,7 +16,7 @@
         <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/layout/fragment_list.xml" value="0.2" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/layout/fragment_list_fragmwnt.xml" value="0.20729166666666668" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/layout/fragment_update.xml" value="0.2" />
-        <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/layout/row_layout.xml" value="0.33" />
+        <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/layout/row_layout.xml" value="0.25" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/menu/add_fragment_menu.xml" value="0.25" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/menu/list_fragment_menu.xml" value="0.25" />
         <entry key="..\:/Users/PC/AndroidStudioProjects/ToDogit/app/src/main/res/menu/update_fragment_menu.xml" value="0.33" />
