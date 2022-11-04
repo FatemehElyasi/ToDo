@@ -1,7 +1,9 @@
 package ir.fatemehelyasi.todogit.fragments.list
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -20,8 +22,11 @@ import ir.fatemehelyasi.todogit.data.models.ToDoData
 import ir.fatemehelyasi.todogit.data.viewmodel.ToDoViewModel
 import ir.fatemehelyasi.todogit.databinding.FragmentListBinding
 import ir.fatemehelyasi.todogit.fragments.SharedViewModel
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private lateinit var binding: FragmentListBinding
     private val adapter: MyListAdapter by lazy { MyListAdapter() }
@@ -77,6 +82,9 @@ class ListFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // Add menu items here
                 menuInflater.inflate(R.menu.list_fragment_menu, menu)
+                val search = menu.findItem(R.id.search)
+                val searchView = search.actionView as? SearchView
+                searchView?.setOnQueryTextListener(this@ListFragment)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -92,42 +100,46 @@ class ListFragment : Fragment() {
 
     //----------------------------------------------------------------------------setUpRecyclerView
     private fun setUpRecyclerView() {
-        binding.recyclerview.adapter = adapter
-        binding.recyclerview.layoutManager = LinearLayoutManager(requireActivity())
+        val recyclerview = binding.recyclerview
+        recyclerview.adapter = adapter
+        recyclerview.layoutManager = LinearLayoutManager(requireActivity())
 
         // swipe To Delete
         swipeToDelete(binding.recyclerview)
     }
+
     //----------------------------------------------------------------------------swipeToDelete
-    private fun swipeToDelete(recyclerView: RecyclerView){
-        val swipeToDeleteCallback=object :SwipeToDelete(){
+    private fun swipeToDelete(recyclerView: RecyclerView) {
+        val swipeToDeleteCallback = object : SwipeToDelete() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val deletedItem=adapter.dataList[viewHolder.adapterPosition]
+                val deletedItem = adapter.dataList[viewHolder.adapterPosition]
                 //Delete Item
                 mToDoViewModel.deleteData(deletedItem)
-                adapter.notifyItemRemoved(viewHolder.adapterPosition )
+                adapter.notifyItemRemoved(viewHolder.adapterPosition)
                 //restore deleted Item
-                restoreDeleteData(viewHolder.itemView,deletedItem,viewHolder.adapterPosition)
-     //           Toast.makeText(requireContext(),"Successfully Removed:'${deletedItem.title}'",Toast.LENGTH_SHORT).show()
+                restoreDeleteData(viewHolder.itemView, deletedItem, viewHolder.adapterPosition)
+                //           Toast.makeText(requireContext(),"Successfully Removed:'${deletedItem.title}'",Toast.LENGTH_SHORT).show()
             }
         }
-        val itemTouchHelper=ItemTouchHelper(swipeToDeleteCallback)
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
-//    ----------------------------------------------------------------------------Undo
+
+    //    ----------------------------------------------------------------------------Undo
     private fun restoreDeleteData(view: View, deletedItem: ToDoData, position: Int) {
         val snackBar = Snackbar.make(
             view, "Deleted ${deletedItem.title} ", Snackbar.LENGTH_LONG
         )
         snackBar.setAction("Undo") {
             mToDoViewModel.insertData(deletedItem)
-            adapter.notifyItemRemoved(position)
+            adapter.notifyItemChanged(position)
         }
         // snackBar background color
         // snackBar.setBackgroundTint(resources.getColor(com.google.android.material.R.color.design_default_color_on_surface))
         //  snackBar.setActionTextColor(resources.getColor(R.color.actionTextColor))
         snackBar.show()
     }
+
     //----------------------------------------------------------------------------//sweet Alert Dialog
     private fun confirmRemovalToAllData() {
         val dialog = SweetAlertDialog(requireContext(), SweetAlertDialog.ERROR_TYPE)
@@ -162,4 +174,31 @@ class ListFragment : Fragment() {
             binding.noDataTextView.visibility = View.INVISIBLE
         }
     }
+
+    //----------------------------------------------------------------------------
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null) {
+            searchThroughDatabase(query)
+        }
+        return true
+    }
+
+    private fun searchThroughDatabase(query: String) {
+        val searchQuery = "%$query%"
+
+        mToDoViewModel.searchDatabase(searchQuery).observe(this, Observer { List ->
+            List?.let {
+                adapter.setData(it)
+            }
+
+        })
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        if (query != null) {
+            searchThroughDatabase(query)
+        }
+        return true
+    }
+
 }
