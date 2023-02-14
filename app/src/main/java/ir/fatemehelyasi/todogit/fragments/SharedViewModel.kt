@@ -18,9 +18,9 @@ import ir.fatemehelyasi.todogit.data.models.ToDoData
 
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
 
-    val emptyDatabase:MutableLiveData<Boolean> = MutableLiveData(true)
-    fun checkIfDatabaseEmpty(toDoData:List<ToDoData> ){
-        emptyDatabase.value=toDoData.isEmpty()
+    val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(false)
+    fun checkIfDatabaseEmpty(toDoData: List<ToDoData>) {
+        emptyDatabase.value = toDoData.isEmpty()
     }
 
 
@@ -33,9 +33,11 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
             position: Int,
             id: Long
         ) {
-            when (position) {
+            val selectedItem = parent!!.getItemAtPosition(position).toString()
+            when (position)
+            {
                 0 -> {
-                    (parent?.getChildAt(0) as TextView).setTextColor(
+                    (parent.getChildAt(0) as TextView).setTextColor(
                         ContextCompat.getColor(
                             application,
                             R.color.red
@@ -43,7 +45,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
                     )
                 }
                 1 -> {
-                    (parent?.getChildAt(0) as TextView).setTextColor(
+                    (parent.getChildAt(0) as TextView).setTextColor(
                         ContextCompat.getColor(
                             application,
                             R.color.yellow
@@ -51,7 +53,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
                     )
                 }
                 2 -> {
-                    (parent?.getChildAt(0) as TextView).setTextColor(
+                    (parent.getChildAt(0) as TextView).setTextColor(
                         ContextCompat.getColor(
                             application,
                             R.color.green
@@ -70,25 +72,21 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
 
     //--------------------04
     fun parsePriority(priority: String): Priority {
-        return when (priority) {
-            "High Priority" -> {
-                Priority.HIGH
-            }
-            "MEDIUM Priority" -> {
-                Priority.MEDIUM
-            }
-            "LOW Priority" -> {
-                Priority.LOW
-            }
-            else -> Priority.LOW
+        return when(priority){
+            "High priority" -> {Priority.HIGH }
+            "Medium priority" ->  {Priority.MEDIUM}
+            "Low priority" ->  {Priority.LOW}
+            else -> Priority.HIGH
         }
     }
+
+
     //----------------------------------------------------------------------------
-     fun parsePriorityToInt(priority: Priority):Int{
-        return when(priority){
-            Priority.HIGH-> 0
-            Priority.MEDIUM-> 1
-            Priority.LOW-> 2
+    fun parsePriorityToInt(priority: Priority): Int {
+        return when (priority) {
+            Priority.HIGH -> 0
+            Priority.MEDIUM -> 1
+            Priority.LOW -> 2
         }
     }
     //----------------------------------------------------------------------------

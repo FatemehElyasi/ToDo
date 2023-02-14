@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView
 import ir.fatemehelyasi.todogit.R
 import ir.fatemehelyasi.todogit.data.models.Priority
 import ir.fatemehelyasi.todogit.data.models.ToDoData
-import kotlin.math.log
 
 class MyListAdapter : RecyclerView.Adapter<MyListAdapter.MyViewHolder>() {
 
@@ -21,53 +20,53 @@ class MyListAdapter : RecyclerView.Adapter<MyListAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val Title_Txt = itemView.findViewById<TextView>(R.id.title_txt)!!
-        val Description_Txt = itemView.findViewById<TextView>(R.id.description_txt)!!
-        val Priority_Indicator = itemView.findViewById<CardView>(R.id.priority_indicator)!!
-        val row_background=itemView.findViewById<ViewGroup>(R.id.row_background)
+        val title_Txt = itemView.findViewById<TextView>(R.id.title_txt)!!
+        val descriptionTxt = itemView.findViewById<TextView>(R.id.description_txt)!!
+        val Priority_Indicator = itemView.findViewById<CardView>(R.id.priority_indicator)
+        val row_background = itemView.findViewById<ViewGroup>(R.id.row_background)
+
     }
+
 
     //------------------------------------------------------------------------------------------------
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 
         Log.v("1"," onCreateViewHolder")
-
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.row_layout, parent, false)
-        return MyViewHolder(view)
+        return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.row_layout, parent, false) )
     }
 
     //------------------------------------------------------------------------------------------------
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        Log.v("1","onBindViewHolder")
 
 
-        holder.Title_Txt.text = dataList[position].title
-        holder.Description_Txt.text = dataList[position].description
+        holder.title_Txt.text=dataList[position].title
+        holder.descriptionTxt.text = dataList[position].description
 
-        when (dataList[position].priority) {
-            Priority.HIGH -> {
+        val priority=dataList[position].priority
+        when (priority) {
+            Priority.HIGH ->
                 holder.Priority_Indicator.setCardBackgroundColor(
                     ContextCompat.getColor(
                         holder.itemView.context, R.color.red
                     )
                 )
-            }
-            Priority.LOW -> {
+
+            Priority.LOW ->
                 holder.Priority_Indicator.setCardBackgroundColor(
                     ContextCompat.getColor(
                         holder.itemView.context, R.color.green
                     )
                 )
-            }
-            Priority.MEDIUM -> {
+
+            Priority.MEDIUM ->
                 holder.Priority_Indicator.setCardBackgroundColor(
                     ContextCompat.getColor(
                         holder.itemView.context, R.color.yellow
                     )
                 )
-            }
         }
+
         holder.row_background.setOnClickListener {
             val action=ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
             holder.itemView.findNavController().navigate(action)

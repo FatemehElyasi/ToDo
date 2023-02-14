@@ -29,6 +29,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private lateinit var binding: FragmentListBinding
     private val adapter: MyListAdapter by lazy { MyListAdapter() }
 
+
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
 
@@ -46,16 +47,15 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
         }
 
-
         //recycler
         setUpRecyclerView()
 
         //viewModel
         // return list of data from dataclass database
-        mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
+        mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer { data ->
             //fun recycler
-            mSharedViewModel.checkIfDatabaseEmpty(it)
-            adapter.setData(it)
+            mSharedViewModel.checkIfDatabaseEmpty(data)
+            adapter.setData(data)
         })
         //empty DB
         mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner, Observer {
@@ -80,6 +80,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // Add menu items here
                 menuInflater.inflate(R.menu.list_fragment_menu, menu)
+                //search
                 val search = menu.findItem(R.id.search)
                 val searchView = search.actionView as? SearchView
                 searchView?.setOnQueryTextListener(this@ListFragment)

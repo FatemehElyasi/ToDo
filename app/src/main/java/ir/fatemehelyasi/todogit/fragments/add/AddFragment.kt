@@ -17,13 +17,13 @@ import ir.fatemehelyasi.todogit.fragments.SharedViewModel
 
 
 class AddFragment : Fragment() {
-    lateinit var binding: FragmentAddBinding
+   private lateinit var binding: FragmentAddBinding
     //--------06
     private val mToDoViewModel:ToDoViewModel by viewModels()
     private val mSharedViewModel:SharedViewModel by viewModels()
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate the layout for this fragment
         binding = FragmentAddBinding.inflate(layoutInflater)
 
@@ -62,7 +62,7 @@ class AddFragment : Fragment() {
     }
 
     //--------------------------------01
-    //por kardan data
+    //fill data
     private fun insertDataToDb() {
         val mTitle = binding.titleEt.text.toString()
         val mPriority = binding.spinner.selectedItem.toString()
