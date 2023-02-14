@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:tools="http://schemas.android.com/tools"
+<menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -9,28 +9,27 @@
         android:title="@string/search"
         app:showAsAction="ifRoom"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        tools:targetApi="o"
         />
 
 
-    <group>
-        <item
-            android:id="@+id/menu_sortBy"
-            android:title="Sort By"
-            tools:ignore="HardcodedText">
+<!--    <group>-->
+<!--        <item-->
+<!--            android:id="@+id/menu_sortBy"-->
+<!--            android:title="Sort By"-->
+<!--            tools:ignore="HardcodedText">-->
 
-            <menu>
-                <item
-                    android:id="@+id/menu_priority_high"
-                    android:title="Menu priority high" />
+<!--            <menu>-->
+<!--                <item-->
+<!--                    android:id="@+id/menu_priority_high"-->
+<!--                    android:title="Menu priority high" />-->
 
-                <item
-                    android:id="@+id/menu_priority_low"
-                    android:title="Menu priority low" />
+<!--                <item-->
+<!--                    android:id="@+id/menu_priority_low"-->
+<!--                    android:title="Menu priority low" />-->
 
-            </menu>
-        </item>
-    </group>
+<!--            </menu>-->
+<!--        </item>-->
+<!--    </group>-->
 
 
     <item

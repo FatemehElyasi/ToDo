@@ -20,55 +20,55 @@ class MyListAdapter : RecyclerView.Adapter<MyListAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val title_Txt = itemView.findViewById<TextView>(R.id.title_txt)!!
+        val titleTxt = itemView.findViewById<TextView>(R.id.title_txt)!!
         val descriptionTxt = itemView.findViewById<TextView>(R.id.description_txt)!!
-        val Priority_Indicator = itemView.findViewById<CardView>(R.id.priority_indicator)
-        val row_background = itemView.findViewById<ViewGroup>(R.id.row_background)
+        val priorityIndicator = itemView.findViewById<CardView>(R.id.priority_indicator)!!
+        val rowBackground = itemView.findViewById<ViewGroup>(R.id.row_background)!!
 
     }
-
 
     //------------------------------------------------------------------------------------------------
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 
-        Log.v("1"," onCreateViewHolder")
-        return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.row_layout, parent, false) )
+        Log.v("1", " onCreateViewHolder")
+        return MyViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.row_layout, parent, false)
+        )
     }
 
     //------------------------------------------------------------------------------------------------
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
 
-
-        holder.title_Txt.text=dataList[position].title
+        holder.titleTxt.text = dataList[position].title
         holder.descriptionTxt.text = dataList[position].description
 
-        val priority=dataList[position].priority
-        when (priority) {
+        when (dataList[position].priority) {
             Priority.HIGH ->
-                holder.Priority_Indicator.setCardBackgroundColor(
+                holder.priorityIndicator.setCardBackgroundColor(
                     ContextCompat.getColor(
                         holder.itemView.context, R.color.red
                     )
                 )
 
             Priority.LOW ->
-                holder.Priority_Indicator.setCardBackgroundColor(
+                holder.priorityIndicator.setCardBackgroundColor(
                     ContextCompat.getColor(
                         holder.itemView.context, R.color.green
                     )
                 )
 
             Priority.MEDIUM ->
-                holder.Priority_Indicator.setCardBackgroundColor(
+                holder.priorityIndicator.setCardBackgroundColor(
                     ContextCompat.getColor(
                         holder.itemView.context, R.color.yellow
                     )
                 )
         }
 
-        holder.row_background.setOnClickListener {
-            val action=ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
+        holder.rowBackground.setOnClickListener {
+            val action =
+                ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
             holder.itemView.findNavController().navigate(action)
         }
     }
